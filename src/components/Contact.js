@@ -3,10 +3,13 @@ import Navigation from "./Navbar";
 
 function Contact() {
   const [account, setAccount] = useState("0x0");
-  const [loading, setLoading] = useState(true);
 
   const cambiarCuenta = () => {
-    setAccount("0x123456789");
+    if(account === "0x0"){
+      setAccount("0x123456789");
+    } else {
+      setAccount("0x0");
+    }
   };
 
   return (

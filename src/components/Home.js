@@ -8,6 +8,7 @@ import MyCarousel from './Carousel';
 
 class App extends Component {
 
+  // Funcion que se ejecuta una vez el componente es montado
   async componentDidMount() {
     // 1. Carga de Web3
     await this.loadWeb3()
@@ -34,6 +35,7 @@ class App extends Component {
   async loadBlockchainData() {
     const web3 = window.web3
     const accounts = await web3.eth.getAccounts()
+    console.log(accounts)
     this.setState({ account: accounts[0] })
     // Ganache -> 5777, Rinkeby -> 4, BSC -> 97
     const networkId = await web3.eth.net.getId() 
