@@ -80,9 +80,6 @@ class App extends Component {
                   <img src={logo} className="App-logo" alt="" width="100%" height="80%" />
                 </a>
                 <h1>DApp (Github: <a href="https://github.com/axie10">Axie10</a>)</h1>
-                <p>
-                  Edita <code>src/components/App.js</code> y guarda para recargar.
-                </p>
               </div>
             </main>
           </div>
