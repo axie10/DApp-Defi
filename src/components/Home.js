@@ -44,7 +44,6 @@ class App extends Component {
           console.log(error);
         });
 
-      console.log("Accounts ethereum: ", accounts);
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
       const accounts = await window.web3.eth.getAccounts();
@@ -88,6 +87,56 @@ class App extends Component {
         "¡El Smart Contract de JamToken no se ha desplegado en la red!"
       );
     }
+
+    // Carga de StellartToken
+    const stellartTokenData = StellartToken.networks[networkId];
+    console.log("StellartTokenData:", stellartTokenData);
+
+    if (stellartTokenData) {
+      const abi = StellartToken.abi;
+      console.log("abi", abi);
+      const address = stellartTokenData.address;
+      console.log("address:", address);
+      const contract = new web3.eth.Contract(abi, address);
+      this.setState({ stellartTokenContract: contract });
+
+      const contractAddress = contract.options.address;
+      console.log('contractAddress',contractAddress)
+      const balance = await contract.methods.balanceOf(this.state.account).call();
+      console.log('balance',balance)
+      const totalSupply = await contract.methods.totalSupply().call();
+      console.log('totalSupply',totalSupply)
+
+    } else {
+      window.alert(
+        "¡El Smart Contract de StellartToken no se ha desplegado en la red!"
+      );
+    }
+
+    // Cargar TokenFarm
+    const tokenFarmData = TokenFarm.networks[networkId];
+    console.log("TokenFarmData:", tokenFarmData);
+
+    if (tokenFarmData) {
+      const abi = TokenFarm.abi;
+      console.log("abi", abi);
+      const address = tokenFarmData.address;
+      console.log("address:", address);
+      const contract = new web3.eth.Contract(abi, address);
+      this.setState({ tokenFarmContract: contract });
+
+      const contractAddress = contract.options.address;
+      console.log('contractAddress',contractAddress)
+      const stakingBalance = await contract.methods.stakingBalance(this.state.account).call();
+      console.log('stakingBalance',stakingBalance)
+      const JamToken = await contract.methods.jamToken().call();
+      console.log('JamToken',JamToken)
+
+    } else {
+      window.alert(
+        "¡El Smart Contract de TokenFarm no se ha desplegado en la red!"
+      );
+    }
   }
 
   constructor(props) {
@@ -96,6 +145,8 @@ class App extends Component {
       account: "0x0",
       loading: true,
       jamTokenContract: {},
+      stellartTokenContract: {},
+      tokenFarmContract: {}
     };
   }
 

@@ -9231,12 +9231,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0x82f3B3E13B0cC21b039cfFD09A772da4794f02E1",
-      "transactionHash": "0xc9ddbe353d264672b28cc408ba42d352f7bc61299b4516ef35c779f5a29120e9"
+      "address": "0xC14Cbb3b6d95e8B9c9a7A3284b0c9D289Ed4c181",
+      "transactionHash": "0xd524d5891434da239c80be261339b0e269bee1136307afcc001c889cacf3c4d3"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-08-15T19:04:11.915Z",
+  "updatedAt": "2025-08-19T16:30:30.829Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

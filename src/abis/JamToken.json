@@ -6732,12 +6732,12 @@
         }
       },
       "links": {},
-      "address": "0x01F44c49c9E0D478BFe94a644101eBd23EeE5323",
-      "transactionHash": "0xbd28b9970139add87dc661ac2d28336cd71abbd7df925ced2de1c0a8c04654e6"
+      "address": "0xE706c4844BACE80893E361CE5c4D174DC3e63E3A",
+      "transactionHash": "0x058f195d3cbe65e6fa4bafbd5142bf18e187ddf8cfc90aa19e7a810e63fb69c2"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-08-15T19:04:11.908Z",
+  "updatedAt": "2025-08-19T16:30:30.822Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
