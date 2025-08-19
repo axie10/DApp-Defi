@@ -35,15 +35,14 @@ class App extends Component {
       });
 
       // Solicitar cuentas
-      const accounts = await window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((result) => {
-          console.log("result", result);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
+      // const accounts = await window.ethereum
+      //   .request({ method: "eth_requestAccounts" })
+      //   .then((result) => {
+      //     console.log("result", result);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
       const accounts = await window.web3.eth.getAccounts();
@@ -69,19 +68,22 @@ class App extends Component {
 
     if (jamTokenData) {
       const abi = JamToken.abi;
-      console.log("abi", abi);
+      // console.log("abi", abi);
       const address = jamTokenData.address;
-      console.log("address:", address);
+      // console.log("address:", address);
       const contract = new web3.eth.Contract(abi, address);
       this.setState({ jamTokenContract: contract });
 
-      const contractAddress = contract.options.address;
-      console.log('contractAddress',contractAddress)
-      const balance = await contract.methods.balanceOf(this.state.account).call();
-      console.log('balance',balance)
-      const totalSupply = await contract.methods.totalSupply().call();
-      console.log('totalSupply',totalSupply)
-      
+      // const contractAddress = contract.options.address;
+      // console.log("contractAddress", contractAddress);
+      // const balance = await contract.methods
+      //   .balanceOf(this.state.account)
+      //   .call();
+      // console.log("balance", balance);
+      // const totalSupply = await contract.methods.totalSupply().call();
+      // console.log("totalSupply", totalSupply);
+      const jamTokenBalance = await contract.methods.balanceOf(this.state.account).call();
+      this.setState({ jamTokenBalance }); 
     } else {
       window.alert(
         "¡El Smart Contract de JamToken no se ha desplegado en la red!"
@@ -90,23 +92,26 @@ class App extends Component {
 
     // Carga de StellartToken
     const stellartTokenData = StellartToken.networks[networkId];
-    console.log("StellartTokenData:", stellartTokenData);
+    // console.log("StellartTokenData:", stellartTokenData);
 
     if (stellartTokenData) {
       const abi = StellartToken.abi;
-      console.log("abi", abi);
+      // console.log("abi", abi);
       const address = stellartTokenData.address;
-      console.log("address:", address);
+      // console.log("address:", address);
       const contract = new web3.eth.Contract(abi, address);
       this.setState({ stellartTokenContract: contract });
 
-      const contractAddress = contract.options.address;
-      console.log('contractAddress',contractAddress)
-      const balance = await contract.methods.balanceOf(this.state.account).call();
-      console.log('balance',balance)
-      const totalSupply = await contract.methods.totalSupply().call();
-      console.log('totalSupply',totalSupply)
-
+      // const contractAddress = contract.options.address;
+      // console.log("contractAddress", contractAddress);
+      // const balance = await contract.methods
+      //   .balanceOf(this.state.account)
+      //   .call();
+      // console.log("balance", balance);
+      // const totalSupply = await contract.methods.totalSupply().call();
+      // console.log("totalSupply", totalSupply);
+      const stellartTokenBalance = await contract.methods.balanceOf(this.state.account).call();
+      this.setState({ stellartTokenBalance });
     } else {
       window.alert(
         "¡El Smart Contract de StellartToken no se ha desplegado en la red!"
@@ -119,25 +124,37 @@ class App extends Component {
 
     if (tokenFarmData) {
       const abi = TokenFarm.abi;
-      console.log("abi", abi);
+      // console.log("abi", abi);
       const address = tokenFarmData.address;
-      console.log("address:", address);
+      // console.log("address:", address);
       const contract = new web3.eth.Contract(abi, address);
       this.setState({ tokenFarmContract: contract });
 
-      const contractAddress = contract.options.address;
-      console.log('contractAddress',contractAddress)
-      const stakingBalance = await contract.methods.stakingBalance(this.state.account).call();
-      console.log('stakingBalance',stakingBalance)
-      const JamToken = await contract.methods.jamToken().call();
-      console.log('JamToken',JamToken)
-
+      // const contractAddress = contract.options.address;
+      // console.log("contractAddress", contractAddress);
+      // const stakingBalance = await contract.methods
+      //   .stakingBalance(this.state.account)
+      //   .call();
+      // console.log("stakingBalance", stakingBalance);
+      // const JamToken = await contract.methods.jamToken().call();
+      // console.log("JamToken", JamToken);
     } else {
       window.alert(
         "¡El Smart Contract de TokenFarm no se ha desplegado en la red!"
       );
     }
+    this.setState({ loading: false });
   }
+
+  stakeTokens = (amount) => {
+    this.setState({ loading: true });
+    this.state.jamTokenContract.methods
+      .approve(this.state.tokenFarmContract.options.address, amount)
+      .send({ from: this.state.account })
+      .on("transactionHash", (hash) => {
+        console.log("transactionHash", hash);
+      });
+  };
 
   constructor(props) {
     super(props);
@@ -145,8 +162,10 @@ class App extends Component {
       account: "0x0",
       loading: true,
       jamTokenContract: {},
+      jamTokenBalance: 0,
       stellartTokenContract: {},
-      tokenFarmContract: {}
+      stellartTokenBalance: 0,
+      tokenFarmContract: {},
     };
   }
 
@@ -168,13 +187,39 @@ class App extends Component {
                     src={logo}
                     className="App-logo"
                     alt=""
-                    width="100%"
-                    height="80%"
+                    width="30%"
+                    height="30%"
                   />
                 </a>
-                <h1>
+                <h2>
                   DApp (Github: <a href="https://github.com/axie10">Axie10</a>)
-                </h1>
+                </h2>
+                <h2>DApp (Balance)</h2>
+                <p><span style={{ fontWeight: "bold" }}>Account:</span>{" "} {this.state.account}</p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>JamToken Contract:</span>{" "}
+                  {this.state.jamTokenContract.options?.address}
+                </p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>JamToken Balance:</span>{" "}
+                  {this.state.jamTokenBalance}
+                </p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>
+                    StellartToken Contract:
+                  </span>{" "}
+                  {this.state.stellartTokenContract.options?.address}
+                </p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>StellartToken Balance:</span>{" "}
+                  {this.state.stellartTokenBalance}
+                </p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>
+                    TokenFarm Contract:
+                  </span>{" "}
+                  {this.state.tokenFarmContract.options?.address}
+                </p>
               </div>
             </main>
           </div>
