@@ -17,6 +17,9 @@ class App extends Component {
     await this.loadWeb3();
     // 2. Carga de datos de la Blockchain
     await this.loadBlockchainData();
+    setTimeout(() => {
+      console.log(this.state.tokenFarmContract._address);
+    }, 1000);
   }
 
   // 1. Carga de Web3
@@ -152,7 +155,13 @@ class App extends Component {
       .approve(this.state.tokenFarmContract.options.address, amount)
       .send({ from: this.state.account })
       .on("transactionHash", (hash) => {
-        console.log("transactionHash", hash);
+        // console.log("transactionHash", hash);
+        this.state.tokenFarmContract.methods
+          .stakeTokens(amount)
+          .send({ from: this.state.account })
+          .on("transactionHash", (hash) => {
+            console.log("transactionHash", hash);
+          });
       });
   };
 
@@ -166,6 +175,7 @@ class App extends Component {
       stellartTokenContract: {},
       stellartTokenBalance: 0,
       tokenFarmContract: {},
+      stakingBalance: 0,
     };
   }
 
